@@ -1,0 +1,20 @@
+# -*- coding: utf-8 -*-
+from gensim.models import Word2Vec
+
+fp1 = open('../walk_path/all_drug_walkpath.txt','r')
+walks = []
+for line in fp1:
+    walk = line.strip().split('\t')
+    walks.append(walk)
+model = Word2Vec(walks, size=100, window=4, sg=1, min_count=10, workers=10, iter=40, hs=0, negative=6)
+feature = open('../feature/drug_feature.txt','w')
+for i in range(733):
+    if i == 0:
+        continue
+    for vec in model[str(i)]:
+        feature.write(str(vec)+' ')
+    feature.write('\n')
+feature.close()
+fp1.close()
+
+
